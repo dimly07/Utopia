@@ -149,9 +149,15 @@ resource "azurerm_linux_virtual_machine" "firewall" {
   }
 }
 
-resource "azurerm_network_interface_backend_address_pool_association" "internal_pri" {
+resource "azurerm_network_interface_backend_address_pool_association" "gateway" {
   count                   = var.number_of_firewalls
   network_interface_id    = azurerm_network_interface.data[count.index].id
   ip_configuration_name   = "ipconfig"
   backend_address_pool_id = azurerm_lb_backend_address_pool.backend_pool.id
+}
+resource "azurerm_network_interface_backend_address_pool_association" "internal" {
+  count                   = var.number_of_firewalls
+  network_interface_id    = azurerm_network_interface.trust[count.index].id
+  ip_configuration_name   = "ipconfig" # must be updated if changed in virtual_appliance_pri.tf
+  backend_address_pool_id = azurerm_lb_backend_address_pool.internal_backends.id
 }

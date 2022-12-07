@@ -45,9 +45,3 @@ resource "azurerm_lb_backend_address_pool" "internal_backends" {
   name            = "trust-backend"
 }
 
-# Primary Firewall
-resource "azurerm_network_interface_backend_address_pool_association" "internal" {
-  network_interface_id    = azurerm_network_interface.trust.id
-  ip_configuration_name   = "ipconfig" # must be updated if changed in virtual_appliance_pri.tf
-  backend_address_pool_id = azurerm_lb_backend_address_pool.internal_backends.id
-}
