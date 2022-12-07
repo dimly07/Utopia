@@ -4,8 +4,8 @@ variable "management_nic_name" {
 }
 
 variable "number_of_firewalls" {
-  type = number
-  default = 2
+  type        = number
+  default     = 2
   description = "number of firewalls to deploy with Terraform"
 }
 
@@ -56,7 +56,7 @@ variable "palo_version" {
 }
 
 resource "azurerm_public_ip" "mgmt" {
-  count = var.number_of_firewalls
+  count               = var.number_of_firewalls
   name                = "${var.management_nic_name}-${count.index + 1}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
@@ -65,7 +65,7 @@ resource "azurerm_public_ip" "mgmt" {
 }
 
 resource "azurerm_network_interface" "mgmt" {
-  count = var.number_of_firewalls
+  count               = var.number_of_firewalls
   name                = "${var.management_nic_name}-${count.index + 1}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -78,7 +78,7 @@ resource "azurerm_network_interface" "mgmt" {
   }
 }
 resource "azurerm_network_interface" "data" {
-  count = var.number_of_firewalls
+  count               = var.number_of_firewalls
   name                = "${var.data_nic_name}-${count.index + 1}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -90,7 +90,7 @@ resource "azurerm_network_interface" "data" {
   }
 }
 resource "azurerm_network_interface" "trust" {
-  count = var.number_of_firewalls
+  count               = var.number_of_firewalls
   name                = "${var.trust_nic_name}-${count.index + 1}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -102,7 +102,7 @@ resource "azurerm_network_interface" "trust" {
   }
 }
 resource "azurerm_network_interface" "untrust" {
-  count = var.number_of_firewalls
+  count               = var.number_of_firewalls
   name                = "${var.untrust_nic_name}-${count.index + 1}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -115,7 +115,7 @@ resource "azurerm_network_interface" "untrust" {
 }
 
 resource "azurerm_linux_virtual_machine" "firewall" {
-  count = var.number_of_firewalls
+  count                           = var.number_of_firewalls
   name                            = "${var.firewall_name}-${count.index + 1}"
   resource_group_name             = azurerm_resource_group.rg.name
   location                        = azurerm_resource_group.rg.location
@@ -150,7 +150,7 @@ resource "azurerm_linux_virtual_machine" "firewall" {
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "internal_pri" {
-  count =  var.number_of_firewalls
+  count                   = var.number_of_firewalls
   network_interface_id    = azurerm_network_interface.data[count.index].id
   ip_configuration_name   = "ipconfig"
   backend_address_pool_id = azurerm_lb_backend_address_pool.backend_pool.id

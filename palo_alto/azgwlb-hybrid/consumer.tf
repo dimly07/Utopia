@@ -109,5 +109,25 @@ resource "azurerm_linux_virtual_machine" "consumer" {
     version   = "latest"
   }
 }
+resource "azurerm_network_security_group" "consumer_nsg" {
+  name                = "Consumer NSG"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 
+  security_rule {
+    name                       = "Internet_In"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+resource "azurerm_subnet_network_security_group_association" "consumer_nsg" {
+  subnet_id                 = azurerm_subnet.consumer.id
+  network_security_group_id = azurerm_network_security_group.consumer_nsg.id
+}
 ## Configure the VM for nginx
