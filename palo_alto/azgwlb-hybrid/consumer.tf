@@ -43,12 +43,13 @@ resource "azurerm_lb_rule" "consumer" {
   backend_port                   = 80
   frontend_ip_configuration_name = "PublicIPAddress"
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.consumer.id]
+  disable_outbound_snat          = true
 }
-resource "azurerm_lb_outbound_rule" "example" {
+resource "azurerm_lb_outbound_rule" "consumer" {
   name                    = "OutboundRule"
   loadbalancer_id         = azurerm_lb.consumer.id
   protocol                = "Tcp"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.backend_pool.id
+  backend_address_pool_id = azurerm_lb_backend_address_pool.consumer.id
 
   frontend_ip_configuration {
     name = "PublicIPAddress"
