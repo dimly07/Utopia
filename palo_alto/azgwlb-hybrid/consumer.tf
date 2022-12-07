@@ -110,7 +110,7 @@ resource "azurerm_linux_virtual_machine" "consumer" {
   }
 }
 resource "azurerm_network_security_group" "consumer_nsg" {
-  name                = "Consumer NSG"
+  name                = "Consumer_NSG"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
